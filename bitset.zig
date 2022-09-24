@@ -147,7 +147,7 @@ pub fn make(comptime input: anytype, comptime T:type) type {
         pub const table_t = makeTable(input, T);
         pub const Table = table_t{};
 
-        pub fn into_cint(comptime set: set_t) c_int {
+        pub fn into_int(comptime set: set_t) T {
             comptime {
                 var hint: comptime_int = 0;
 
@@ -161,7 +161,7 @@ pub fn make(comptime input: anytype, comptime T:type) type {
             }
         }
 
-        pub fn from_cint(comptime hint: c_int) set_t {
+        pub fn from_int(comptime hint: T) set_t {
             comptime {
                 var set = set_t{};
 
@@ -182,8 +182,8 @@ test "bitset1" {
 
     const Set = rgb.set_t;
     const RGB = rgb.Table;
-    const from = rgb.from_cint;
-    const into = rgb.into_cint;
+    const from = rgb.from_int;
+    const into = rgb.into_int;
 
     // test
     const eql = std.meta.eql;
@@ -222,8 +222,8 @@ test "bitset2" {
 
     const Set = rgb.set_t;
     const RGB = rgb.Table;
-    const from = rgb.from_cint;
-    const into = rgb.into_cint;
+    const from = rgb.from_int;
+    const into = rgb.into_int;
 
     // test
     const eql = std.meta.eql;
@@ -263,8 +263,8 @@ test "bitset3" {
 
     const Set = rgb.set_t;
     const RGB = rgb.Table;
-    const from = rgb.from_cint;
-    const into = rgb.into_cint;
+    const from = rgb.from_int;
+    const into = rgb.into_int;
 
     // test
     const eql = std.meta.eql;

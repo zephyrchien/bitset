@@ -27,11 +27,11 @@ Output includes:
 Build, typedef:
 
 ```zig
-const rgb = make(.{ "red", "green", "blue" }, u32);
+const rgb = make(.{ "red", "green", "blue" }, c_int);
 const Set = rgb.set_t;
 const RGB = rgb.Table;
-const from = rgb.from_cint;
-const into = rgb.into_cint;
+const from = rgb.from_int;
+const into = rgb.into_int;
 ```
 
 Use compressed bitset:
