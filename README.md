@@ -43,7 +43,7 @@ fn init(set: Set) {
 }
 
 fn main() {
-    init(.{.read = true});
+    init(.{.red = true});
 }
 ```
 
