@@ -147,32 +147,28 @@ pub fn make(comptime input: anytype, comptime T:type) type {
         pub const table_t = makeTable(input, T);
         pub const Table = table_t{};
 
-        pub fn into_int(comptime set: set_t) T {
-            comptime {
-                var hint: comptime_int = 0;
+        pub fn into_int(set: set_t) T {
+            var hint: T = 0;
 
-                for (std.meta.fields(table_t)) |field| {
-                    const name = field.name;
-                    const value = @field(Table, name);
-                    if (@field(set, name)) { hint |= value; }
-                }
-
-                return hint;
+            inline for (std.meta.fields(table_t)) |field| {
+                const name = field.name;
+                const value = @field(Table, name);
+                if (@field(set, name)) { hint |= value; }
             }
+
+            return hint;
         }
 
-        pub fn from_int(comptime hint: T) set_t {
-            comptime {
-                var set = set_t{};
+        pub fn from_int(hint: T) set_t {
+            var set = set_t{};
 
-                for (std.meta.fields(table_t)) |field| {
-                    const name = field.name;
-                    const value = @field(Table, name);
-                    @field(set, name) = (hint & value != 0);
-                }
-
-                return set;
+            inline for (std.meta.fields(table_t)) |field| {
+                const name = field.name;
+                const value = @field(Table, name);
+                @field(set, name) = (hint & value != 0);
             }
+
+            return set;
         }
     };
 }
@@ -202,17 +198,17 @@ test "bitset1" {
     const set3 = Set{.red = true, .green = true};
     const set4 = Set{.red = true, .green = true, .blue = true};
 
-    try expect(into(set0) == 0);
-    try expect(into(set1) == 0b001);
-    try expect(into(set2) == 0b010);
-    try expect(into(set3) == 0b011);
-    try expect(into(set4) == 0b111);
+    try expect(comptime into(set0) == 0);
+    try expect(comptime into(set1) == 0b001);
+    try expect(comptime into(set2) == 0b010);
+    try expect(comptime into(set3) == 0b011);
+    try expect(comptime into(set4) == 0b111);
 
-    try expect(eql(set0, from(into(set0))));
-    try expect(eql(set1, from(into(set1))));
-    try expect(eql(set2, from(into(set2))));
-    try expect(eql(set3, from(into(set3))));
-    try expect(eql(set4, from(into(set4))));
+    try expect(eql(set0, comptime from(into(set0))));
+    try expect(eql(set1, comptime from(into(set1))));
+    try expect(eql(set2, comptime from(into(set2))));
+    try expect(eql(set3, comptime from(into(set3))));
+    try expect(eql(set4, comptime from(into(set4))));
 }
 
 test "bitset2" {
@@ -242,17 +238,17 @@ test "bitset2" {
     const set3 = Set{.red = true, .green = true};
     const set4 = Set{.red = true, .green = true, .blue = true};
 
-    try expect(into(set0) == 0);
-    try expect(into(set1) == 0b001);
-    try expect(into(set2) == 0b010);
-    try expect(into(set3) == 0b011);
-    try expect(into(set4) == 0b111);
+    try expect(comptime into(set0) == 0);
+    try expect(comptime into(set1) == 0b001);
+    try expect(comptime into(set2) == 0b010);
+    try expect(comptime into(set3) == 0b011);
+    try expect(comptime into(set4) == 0b111);
 
-    try expect(eql(set0, from(into(set0))));
-    try expect(eql(set1, from(into(set1))));
-    try expect(eql(set2, from(into(set2))));
-    try expect(eql(set3, from(into(set3))));
-    try expect(eql(set4, from(into(set4))));
+    try expect(eql(set0, comptime from(into(set0))));
+    try expect(eql(set1, comptime from(into(set1))));
+    try expect(eql(set2, comptime from(into(set2))));
+    try expect(eql(set3, comptime from(into(set3))));
+    try expect(eql(set4, comptime from(into(set4))));
 }
 
 test "bitset3" {
@@ -283,15 +279,15 @@ test "bitset3" {
     const set3 = Set{.red = true, .green = true};
     const set4 = Set{.red = true, .green = true, .blue = true};
 
-    try expect(into(set0) == 0);
-    try expect(into(set1) == R);
-    try expect(into(set2) == G);
-    try expect(into(set3) == R|G);
-    try expect(into(set4) == R|G|B);
+    try expect(comptime into(set0) == 0);
+    try expect(comptime into(set1) == R);
+    try expect(comptime into(set2) == G);
+    try expect(comptime into(set3) == R|G);
+    try expect(comptime into(set4) == R|G|B);
 
-    try expect(eql(set0, from(into(set0))));
-    try expect(eql(set1, from(into(set1))));
-    try expect(eql(set2, from(into(set2))));
-    try expect(eql(set3, from(into(set3))));
-    try expect(eql(set4, from(into(set4))));
+    try expect(eql(set0, comptime from(into(set0))));
+    try expect(eql(set1, comptime from(into(set1))));
+    try expect(eql(set2, comptime from(into(set2))));
+    try expect(eql(set3, comptime from(into(set3))));
+    try expect(eql(set4, comptime from(into(set4))));
 }
